@@ -1,7 +1,7 @@
 // store/store.js
 import { create } from "zustand";
 
-const useStore = create((set) => ({
+const useAuthStore = create((set) => ({
   // State
   user: null,
 
@@ -24,4 +24,4 @@ const useStore = create((set) => ({
   logout: () => set({ user: null }),
 }));
 
-export default useStore;
+export default useAuthStore;

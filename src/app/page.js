@@ -1,14 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, Input, Button, Spin, Alert, Modal } from "antd";
 import { useRouter } from "next/navigation";
-import useStore from "@/store/authStore/authStore";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProjects } from "./api/fetchAPI";
+import useAuthStore from "@/store/authStore/authStore";
 
 const LoginPage = () => {
-  const login = useStore((state) => state.login);
+  const login = useAuthStore((state) => state.login);
 
   // States
   const [loading, setLoading] = useState(false);
@@ -36,27 +34,6 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-
-  const {
-    data: projects,
-    isLoading,
-    refetch,
-  } = useQuery({ queryKey: ["projects"], queryFn: fetchProjects });
-  // useEffect(() => {
-  //   const fetchProject = async () => {
-  //     // Fetch project details from your mock API or data source
-  //     const response = await fetch(`/api/mock-api?resource=projects`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     const result = await response.json();
-  //     console.log({ result });
-  //   };
-  //   fetchProject();
-  // }, []);
-
-  console.log({ projects });
 
   return (
     <div className="container mx-auto">

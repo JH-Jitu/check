@@ -1,70 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { Spin, Tabs } from "antd";
+import { useEffect } from "react";
+import { Button, Space, Spin } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProjects } from "../api/fetchAPI";
+import useStore from "@/store/projectStore/projectStore";
+import useProjectStore from "@/store/projectStore/projectStore";
+import useAuthStore from "@/store/authStore/authStore";
+// import ProjectList from '../../components/ProjectList';
 
-const ProjectDetailsPage = () => {
-  const { id } = useParams();
-  const [showTaskModal, setShowTaskModal] = useState(false);
-  const { data: project, isLoading } = useQuery(["project", id], fetchProject);
-  const setTasks = useStore((state) => state.setTasks);
+const ProjectsOverviewPage = () => {
+  const {
+    data: projects,
+    isLoading,
+    refetch,
+  } = useQuery({ queryKey: ["projects"], queryFn: fetchProjects });
+
+  const setProjects = useProjectStore((state) => state.setProjects);
+  const user = useAuthStore((state) => state?.user);
+  console.log({ user });
 
   useEffect(() => {
-    if (project && project.tasks) {
-      setTasks(project.tasks);
+    if (projects) {
+      setProjects(projects);
     }
-  }, [project, setTasks]);
-
-  const fetchProject = async () => {
-    // Fetch project details from your mock API or data source
-    const response = await fetch(`/api/projects/${id}`);
-    return response.json();
-  };
-
-  const handleAddTask = () => {
-    setShowTaskModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowTaskModal(false);
-  };
+  }, [projects, setProjects]);
 
   return (
     <div className="p-4">
+      <div className="mb-4">
+        <Space>
+          <Button type="primary">Add Project</Button>
+          <Button onClick={refetch}>Refresh</Button>
+        </Space>
+      </div>
       {isLoading ? (
         <div className="flex justify-center">
-          <Spin tip="Loading project details..." />
+          <Spin tip="Loading projects..." />
         </div>
       ) : (
-        <>
-          <ProjectDetails project={project} />
-          <div className="mt-4">
-            <Tabs defaultActiveKey="tasks">
-              <Tabs.TabPane tab="Tasks" key="tasks">
-                <div className="mb-4">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleAddTask}
-                  >
-                    Add Task
-                  </button>
-                </div>
-                <TaskList tasks={project.tasks} projectId={project.id} />
-              </Tabs.TabPane>
-            </Tabs>
-          </div>
-          {showTaskModal && (
-            <TaskModal
-              visible={showTaskModal}
-              onCancel={handleCloseModal}
-              projectId={project.id}
-            />
-          )}
-        </>
+        <ProjectList projects={projects} />
       )}
     </div>
   );
 };
 
-export default ProjectDetailsPage;
+export default ProjectsOverviewPage;
+
+const ProjectList = () => {
+  return <div>Hello</div>;
+};
