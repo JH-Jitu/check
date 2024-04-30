@@ -13,7 +13,7 @@ const mockAPIHandler = async (req) => {
   const searchParams = new URLSearchParams(urlFor.searchParams);
   const resource = searchParams.get("resource");
   const id = searchParams.get("id");
-  console.log({ resource });
+  console.log({ id });
   // const { id } = query || {};
 
   if (!resource) {
@@ -57,8 +57,21 @@ const mockAPIHandler = async (req) => {
           headers: { "Content-Type": "application/json" },
         });
       case "PUT":
+        console.log("working here");
         if (id) {
           const itemIndex = data.findIndex((d) => d.id === parseInt(id));
+
+          // console.log({ body: body });
+          async function streamToString(stream) {
+            const chunks = [];
+            for await (const chunk of stream) {
+              chunks.push(chunk);
+            }
+            return Buffer.concat(chunks).toString("utf8");
+          }
+          const body = await streamToString(req.body);
+
+          console.log({ body });
           if (itemIndex !== -1) {
             const updatedItem = { ...JSON.parse(body), id: parseInt(id) };
             data[itemIndex] = updatedItem;

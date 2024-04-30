@@ -6,10 +6,10 @@
     "teamId": 1
   },
   {
-    "id": 2,
     "name": "Project B",
     "description": "This is Project B",
-    "teamId": 2
+    "teamId": 2,
+    "id": 2
   },
   {
     "id": 3,

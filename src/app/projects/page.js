@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { Button, Space, Spin } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProjects } from "../api/fetchAPI";
-import useStore from "@/store/projectStore/projectStore";
 import useProjectStore from "@/store/projectStore/projectStore";
 import useAuthStore from "@/store/authStore/authStore";
+import ProjectList from "@/components/ProjectList/ProjectList";
 // import ProjectList from '../../components/ProjectList';
 
 const ProjectsOverviewPage = () => {
@@ -46,7 +46,3 @@ const ProjectsOverviewPage = () => {
 };
 
 export default ProjectsOverviewPage;
-
-const ProjectList = () => {
-  return <div>Hello</div>;
-};
