@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Team A",
+    "members": [
+      {
+        "id": 1,
+        "name": "John Doe"
+      },
+      {
+        "id": 2,
+        "name": "Jane Smith"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Team B",
+    "members": [
+      {
+        "id": 3,
+        "name": "Bob Johnson"
+      },
+      {
+        "id": 4,
+        "name": "Alice Williams"
+      }
+    ]
+  }
+]

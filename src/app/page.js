@@ -1,10 +1,11 @@
-// app/auth/login/page.jsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input, Button, Spin, Alert, Modal } from "antd";
 import { useRouter } from "next/navigation";
 import useStore from "@/store/authStore/authStore";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProjects } from "./api/fetchAPI";
 
 const LoginPage = () => {
   const login = useStore((state) => state.login);
@@ -35,6 +36,27 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
+
+  const {
+    data: projects,
+    isLoading,
+    refetch,
+  } = useQuery({ queryKey: ["projects"], queryFn: fetchProjects });
+  // useEffect(() => {
+  //   const fetchProject = async () => {
+  //     // Fetch project details from your mock API or data source
+  //     const response = await fetch(`/api/mock-api?resource=projects`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     const result = await response.json();
+  //     console.log({ result });
+  //   };
+  //   fetchProject();
+  // }, []);
+
+  console.log({ projects });
 
   return (
     <div className="container mx-auto">
@@ -67,13 +89,14 @@ const LoginPage = () => {
             >
               <Input.Password placeholder="Password" />
             </Form.Item>
-            <Button
-              className="mb-5"
-              type="default"
-              onClick={() => setIsModalOpen((prevState) => !prevState)}
-            >
-              Show Username and Password
-            </Button>
+            <Form.Item>
+              <Button
+                type="default"
+                onClick={() => setIsModalOpen((prevState) => !prevState)}
+              >
+                Show Username and Password
+              </Button>
+            </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" block loading={loading}>
                 Log in

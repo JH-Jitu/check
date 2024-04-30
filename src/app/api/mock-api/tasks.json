@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Task 1",
+    "description": "This is Task 1",
+    "status": "todo",
+    "dueDate": "2023-05-10",
+    "projectId": 1,
+    "assignedTo": [1, 2]
+  },
+  {
+    "id": 2,
+    "name": "Task 2",
+    "description": "This is Task 2",
+    "status": "in-progress",
+    "dueDate": "2023-05-15",
+    "projectId": 1,
+    "assignedTo": [3]
+  },
+  {
+    "id": 3,
+    "name": "Task 3",
+    "description": "This is Task 3",
+    "status": "done",
+    "dueDate": "2023-05-20",
+    "projectId": 2,
+    "assignedTo": [2, 3]
+  }
+]

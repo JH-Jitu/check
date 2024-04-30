@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Project A",
+    "description": "This is Project A",
+    "teamId": 1
+  },
+  {
+    "id": 2,
+    "name": "Project B",
+    "description": "This is Project B",
+    "teamId": 2
+  },
+  {
+    "id": 3,
+    "name": "Project C",
+    "description": "This is Project C",
+    "teamId": 1
+  }
+]
