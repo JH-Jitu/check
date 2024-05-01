@@ -21,6 +21,7 @@ import {
   fetchProjectDetails,
   fetchTasks,
   fetchTeams,
+  updateTask,
 } from "@/app/api/fetchAPI";
 import {
   PlusOutlined,
@@ -142,14 +143,31 @@ const ProjectDetailsPage = ({ params }) => {
     addTaskMutation({ ...values, projectId: id });
   };
 
-  const handleStatusChange = (updatedTasks) => {
-    const updatedTaskIds = updatedTasks.map((task) => task.id);
-    queryClient.setQueryData(["tasks", id], updatedTasks);
-    queryClient.invalidateQueries(["tasks", id]);
+  const {
+    mutate: updateTaskMutation,
+    isPending,
+    status,
+  } = useMutation({
+    mutationFn: updateTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tasks"]);
+    },
+  });
 
+  const handleStatusChange = (updatedTask) => {
+    console.log({ updatedTask });
+    updateTaskMutation({ ...updatedTask, id: updatedTask?.id });
+
+    // addTaskMutation({ updatedTasks, projectId: id });
+    // const updatedTaskIds = updatedTasks.map((task) => task.id);
+    // queryClient.setQueryData(["tasks", id], updatedTasks);
+    // queryClient.invalidateQueries(["tasks", id]);
+    // console.log({ updatedTaskIds });
     // Update the task status in the server (if applicable)
     // You can add an API call here to update the task status on the server-side
   };
+
+  console.log({ status });
 
   if (isProjectLoading || isTasksLoading) {
     return (
@@ -219,7 +237,7 @@ const ProjectDetailsPage = ({ params }) => {
                     overlay={
                       <Menu onClick={handleStatusFilterChange}>
                         <Menu.Item key="">All</Menu.Item>
-                        <Menu.Item key="todo">To Do</Menu.Item>
+                        <Menu.Item key={"todo"}>To Do</Menu.Item>
                         <Menu.Item key="in-progress">In Progress</Menu.Item>
                         <Menu.Item key="done">Done</Menu.Item>
                       </Menu>
@@ -275,6 +293,8 @@ const ProjectDetailsPage = ({ params }) => {
                 <DragAndDropTasks
                   tasks={filteredTasks}
                   onStatusChange={handleStatusChange}
+                  isPending={isPending}
+                  handleAddTask={handleAddTask}
                 />
               )}
               <Button

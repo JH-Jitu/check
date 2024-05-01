@@ -46,3 +46,10 @@ export const addTask = async (taskData) => {
   const response = await axios.post("/api/mock-api?resource=tasks", taskData);
   return response.data;
 };
+export const updateTask = async (data) => {
+  const response = await axios.put(
+    `/api/mock-api?resource=tasks&id=${data.id}`,
+    data
+  );
+  return response.data;
+};

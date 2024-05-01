@@ -3,10 +3,13 @@
     "id": 1,
     "name": "Task 1",
     "description": "This is Task 1",
-    "status": "done",
+    "status": "in-progress",
     "dueDate": "2023-05-20",
     "projectId": 1,
-    "assignedTo": [2, 3]
+    "assignedTo": [
+      2,
+      3
+    ]
   },
   {
     "id": 2,
@@ -15,46 +18,68 @@
     "status": "done",
     "dueDate": "2023-05-20",
     "projectId": 2,
-    "assignedTo": [2, 3]
+    "assignedTo": [
+      2,
+      3
+    ]
   },
   {
     "id": 3,
     "name": "Task 3",
     "description": "This is Task 3",
-    "status": "done",
+    "status": "in-progress",
     "dueDate": "2023-05-20",
     "projectId": 3,
-    "assignedTo": [2, 3]
+    "assignedTo": [
+      2,
+      3
+    ]
   },
   {
     "id": 4,
     "name": "Task 4",
     "description": "This is Task 4",
-    "status": "done",
+    "status": "in-progress",
     "dueDate": "2023-05-20",
     "projectId": 4,
-    "assignedTo": [2, 3]
+    "assignedTo": [
+      2,
+      3
+    ]
   },
   {
     "name": "Task 5",
     "description": "5",
-    "assignedTo": [5, 4],
+    "assignedTo": [
+      5,
+      4
+    ],
     "dueDate": "2024-05-09",
     "projectId": 3,
-    "id": 5
+    "id": 5,
+    "status": "done"
   },
   {
     "name": "Task 6",
     "description": "6",
-    "assignedTo": [4],
+    "assignedTo": [
+      4
+    ],
     "dueDate": "2024-05-15",
     "projectId": 3,
-    "id": 6
+    "id": 6,
+    "status": "todo"
   },
   {
     "name": "Task 7",
     "description": "7",
-    "assignedTo": [1, 2, 3, 4, 5],
+    "assignedTo": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
     "dueDate": "2024-05-16",
     "status": "todo",
     "projectId": 1,
