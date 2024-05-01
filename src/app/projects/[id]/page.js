@@ -12,14 +12,22 @@ import {
   Select,
   Drawer,
   Spin,
+  Dropdown,
+  Menu,
+  Tooltip,
 } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import {
   addTask,
   fetchProjectDetails,
   fetchTasks,
   fetchTeams,
 } from "@/app/api/fetchAPI";
+import {
+  PlusOutlined,
+  FilterOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import DragAndDropTasks from "./DragAndDropTasks";
 
 const { Option } = Select;
 
@@ -42,17 +50,71 @@ const ProjectDetailsPage = ({ params }) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
-  const getAssignedTeamMembers = (tasks) => {
+  const [searchTerm, setSearchTerm] = useState(""); // Initialize searchTerm state
+  const [statusFilter, setStatusFilter] = useState(""); // Initialize statusFilter state
+  const [dueFilter, setDueFilter] = useState(""); // Initialize dueFilter state
+  const [assigneeFilter, setAssigneeFilter] = useState(""); // Initialize assigneeFilter state
+
+  const filterTasks = (tasks) => {
+    let filteredTasks = tasks;
+
+    if (searchTerm) {
+      filteredTasks = filteredTasks.filter((task) =>
+        task.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (statusFilter) {
+      filteredTasks = filteredTasks.filter(
+        (task) => task.status === statusFilter
+      );
+    }
+
+    if (dueFilter === "overdue") {
+      filteredTasks = filteredTasks.filter((task) => task.dueDate < new Date());
+    } else if (dueFilter === "today") {
+      const today = new Date();
+      filteredTasks = filteredTasks.filter(
+        (task) =>
+          task.dueDate >= today &&
+          task.dueDate < new Date(today.getTime() + 24 * 60 * 60 * 1000)
+      );
+    } else if (dueFilter === "upcoming") {
+      const today = new Date();
+      filteredTasks = filteredTasks.filter(
+        (task) =>
+          task.dueDate >= new Date(today.getTime() + 24 * 60 * 60 * 1000)
+      );
+    }
+
+    if (assigneeFilter) {
+      filteredTasks = filteredTasks.filter((task) =>
+        task.assignedTo.includes(parseInt(assigneeFilter))
+      );
+    }
+
+    return filteredTasks;
+  };
+
+  const filteredTasks = filterTasks(tasks || []);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value); // Update searchTerm state
+  };
+
+  const handleStatusFilterChange = (e) => {
+    setStatusFilter(e.key); // Update statusFilter state
+  };
+
+  const getAssignedTeamMembers = (task) => {
     const assignedTeamMembers = [];
-    console.log({ tasks });
+    console.log({ task });
     if (teams) {
-      tasks?.forEach((task) => {
-        task &&
-          task.assignedTo.forEach((memberId) => {
-            const team = teams.find((t) => t.id === memberId);
-            assignedTeamMembers.push(team);
-          });
-      });
+      task &&
+        task.assignedTo.forEach((memberId) => {
+          const team = teams.find((t) => t.id === memberId);
+          assignedTeamMembers.push(team);
+        });
     }
 
     return assignedTeamMembers;
@@ -80,6 +142,15 @@ const ProjectDetailsPage = ({ params }) => {
     addTaskMutation({ ...values, projectId: id });
   };
 
+  const handleStatusChange = (updatedTasks) => {
+    const updatedTaskIds = updatedTasks.map((task) => task.id);
+    queryClient.setQueryData(["tasks", id], updatedTasks);
+    queryClient.invalidateQueries(["tasks", id]);
+
+    // Update the task status in the server (if applicable)
+    // You can add an API call here to update the task status on the server-side
+  };
+
   if (isProjectLoading || isTasksLoading) {
     return (
       <div className="flex justify-center h-screen place-items-center">
@@ -95,19 +166,7 @@ const ProjectDetailsPage = ({ params }) => {
           <Descriptions.Item label="Description" span={3}>
             {project.description}
           </Descriptions.Item>
-          <Descriptions.Item label="Team Members" span={3}>
-            <div className="mt-4">
-              {getAssignedTeamMembers(tasks).length === 0 ? (
-                <p>No team members assigned</p>
-              ) : (
-                <ul>
-                  {getAssignedTeamMembers(tasks).map((member, index) => (
-                    <li key={index}>{member.name}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </Descriptions.Item>
+
           <Descriptions.Item label="Tasks" span={3}>
             <div className="mt-4">
               <h3>Tasks</h3>
@@ -116,7 +175,24 @@ const ProjectDetailsPage = ({ params }) => {
               ) : (
                 <ul>
                   {tasks?.map((task, index) => (
-                    <li key={index}>{task.name}</li>
+                    <li key={index}>
+                      {task.name}
+                      <Descriptions.Item label="Team Members" span={3}>
+                        <div className="mt-4">
+                          {task?.assignedTo?.length === 0 ? (
+                            <p>No team members assigned</p>
+                          ) : (
+                            <ul>
+                              {getAssignedTeamMembers(task).map(
+                                (member, index) => (
+                                  <li key={index}>{member.name}</li>
+                                )
+                              )}
+                            </ul>
+                          )}
+                        </div>
+                      </Descriptions.Item>
+                    </li>
                   ))}
                 </ul>
               )}
@@ -125,20 +201,92 @@ const ProjectDetailsPage = ({ params }) => {
               </Button>
             </div>
           </Descriptions.Item>
-        </Descriptions>
 
-        {/* <div className="mt-4">
-          <h3>Recent Activities</h3>
-          {project.recentActivities.length === 0 ? (
-            <p>No recent activities found</p>
-          ) : (
-            <ul>
-              {project.recentActivities.map((activity, index) => (
-                <li key={index}>{activity}</li>
-              ))}
-            </ul>
-          )}
-        </div> */}
+          {/* New */}
+          <Descriptions.Item>
+            <div className="mt-4">
+              <div className="flex justify-between mb-4">
+                <h3>Tasks</h3>
+                <div className="flex items-center">
+                  <Input
+                    placeholder="Search tasks"
+                    prefix={<SearchOutlined />}
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    className="mr-4"
+                  />
+                  <Dropdown
+                    overlay={
+                      <Menu onClick={handleStatusFilterChange}>
+                        <Menu.Item key="">All</Menu.Item>
+                        <Menu.Item key="todo">To Do</Menu.Item>
+                        <Menu.Item key="in-progress">In Progress</Menu.Item>
+                        <Menu.Item key="done">Done</Menu.Item>
+                      </Menu>
+                    }
+                  >
+                    <Tooltip title="Filter by status">
+                      <Button>
+                        <FilterOutlined /> Status
+                      </Button>
+                    </Tooltip>
+                  </Dropdown>
+                  {/* <Dropdown
+                    overlay={
+                      <Menu onClick={handleDueFilterChange}>
+                        <Menu.Item key="">All</Menu.Item>
+                        <Menu.Item key="overdue">Overdue</Menu.Item>
+                        <Menu.Item key="today">Today</Menu.Item>
+                        <Menu.Item key="upcoming">Upcoming</Menu.Item>
+                      </Menu>
+                    }
+                    className="ml-2"
+                  >
+                    <Tooltip title="Filter by due date">
+                      <Button>
+                        <FilterOutlined /> Due Date
+                      </Button>
+                    </Tooltip>
+                  </Dropdown> */}
+                  {/* <Dropdown
+                    overlay={
+                      <Menu onClick={handleAssigneeFilterChange}>
+                        <Menu.Item key="">All</Menu.Item>
+                        {teams.map((team) =>
+                          team.members.map((member) => (
+                            <Menu.Item key={member.id}>{member.name}</Menu.Item>
+                          ))
+                        )}
+                      </Menu>
+                    }
+                    className="ml-2"
+                  >
+                    <Tooltip title="Filter by assignee">
+                      <Button>
+                        <FilterOutlined /> Assignee
+                      </Button>
+                    </Tooltip>
+                  </Dropdown> */}
+                </div>
+              </div>
+              {filteredTasks.length === 0 ? (
+                <p>No tasks found</p>
+              ) : (
+                <DragAndDropTasks
+                  tasks={filteredTasks}
+                  onStatusChange={handleStatusChange}
+                />
+              )}
+              <Button
+                type="primary"
+                onClick={handleAddTask}
+                className="mt-4 block ml-auto"
+              >
+                <PlusOutlined /> Add Task
+              </Button>
+            </div>
+          </Descriptions.Item>
+        </Descriptions>
       </Card>
 
       <Drawer
@@ -168,7 +316,7 @@ const ProjectDetailsPage = ({ params }) => {
             rules={[{ required: true, message: "Please select team members" }]}
           >
             <Select mode="multiple" placeholder="Select team members">
-              {teams.map((member) => (
+              {teams?.map((member) => (
                 <Option key={member.id} value={member.id}>
                   {member.name}
                 </Option>
