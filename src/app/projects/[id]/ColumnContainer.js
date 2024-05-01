@@ -6,7 +6,6 @@ import TaskCard from "./TaskCard";
 
 function ColumnContainer({
   column,
-  deleteColumn,
   updateColumn,
   //   createTask,
   tasks,
@@ -130,21 +129,6 @@ function ColumnContainer({
             />
           )}
         </div>
-        <button
-          onClick={() => {
-            deleteColumn(column.id);
-          }}
-          className="
-        stroke-gray-500
-        hover:stroke-white
-        hover:bg-columnBackgroundColor
-        rounded
-        px-1
-        py-2
-        "
-        >
-          <TrashIcon />
-        </button>
       </div>
 
       {/* Column task container */}

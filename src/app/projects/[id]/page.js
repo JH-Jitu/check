@@ -140,7 +140,7 @@ const ProjectDetailsPage = ({ params }) => {
   };
 
   const handleSubmitTask = (values) => {
-    addTaskMutation({ ...values, projectId: id });
+    addTaskMutation({ ...values, status: "todo", projectId: id });
   };
 
   const {
@@ -335,7 +335,15 @@ const ProjectDetailsPage = ({ params }) => {
             label="Assigned To"
             rules={[{ required: true, message: "Please select team members" }]}
           >
-            <Select mode="multiple" placeholder="Select team members">
+            <Select
+              mode="multiple"
+              placeholder="Select team members"
+              showSearch // Enable search functionality
+              optionFilterProp="children" // Specify which property of Option will be used for filtering
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              } // Filter options based on input
+            >
               {teams?.map((member) => (
                 <Option key={member.id} value={member.id}>
                   {member.name}
@@ -343,6 +351,7 @@ const ProjectDetailsPage = ({ params }) => {
               ))}
             </Select>
           </Form.Item>
+
           <Form.Item
             name="dueDate"
             label="Due Date"

@@ -144,7 +144,6 @@ function DragAndDropTask(props) {
                 <ColumnContainer
                   key={col.id}
                   column={col}
-                  deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
                   createTask={createTask}
                   deleteTask={deleteTask}
@@ -162,7 +161,6 @@ function DragAndDropTask(props) {
             {activeColumn && (
               <ColumnContainer
                 column={activeColumn}
-                deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createTask}
                 deleteTask={deleteTask}
@@ -207,14 +205,6 @@ function DragAndDropTask(props) {
       return { ...task, content };
     });
 
-    setTasks(newTasks);
-  }
-
-  function deleteColumn(id) {
-    const filteredColumns = columns.filter((col) => col.id !== id);
-    setColumns(filteredColumns);
-
-    const newTasks = tasks.filter((t) => t.status !== id);
     setTasks(newTasks);
   }
 
