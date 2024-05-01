@@ -7,12 +7,13 @@ const dataDirectory = path.join(process.cwd(), "src", "app", "api", "mock-api");
 const mockAPIHandler = async (req) => {
   // const router = useRouter()
   console.log({ req });
-  const { query, url, method, body } = req;
+  const { query, url, method } = req;
 
   const urlFor = new URL(url);
   const searchParams = new URLSearchParams(urlFor.searchParams);
   const resource = searchParams.get("resource");
   const id = searchParams.get("id");
+  const projectId = searchParams.get("projectId");
   console.log({ id });
   // const { id } = query || {};
 
@@ -31,6 +32,21 @@ const mockAPIHandler = async (req) => {
     console.log({ filePath, data });
     switch (method) {
       case "GET":
+        if (resource === "tasks") {
+          const items = data.map(
+            (d) => d.projectId === parseInt(projectId) && d
+          );
+          if (items) {
+            return new NextResponse(JSON.stringify(items), {
+              headers: { "Content-Type": "application/json" },
+            });
+          } else {
+            return new NextResponse(
+              JSON.stringify({ error: "Item not found" }),
+              { status: 404, headers: { "Content-Type": "application/json" } }
+            );
+          }
+        }
         if (id) {
           const item = data.find((d) => d.id === parseInt(id));
           if (item) {
@@ -43,13 +59,30 @@ const mockAPIHandler = async (req) => {
               { status: 404, headers: { "Content-Type": "application/json" } }
             );
           }
+
+          getData(resource === "tasks" ? projectId : id);
         } else {
           return new NextResponse(JSON.stringify(data), {
             headers: { "Content-Type": "application/json" },
           });
         }
       case "POST":
-        const newItem = { ...JSON.parse(body), id: data.length + 1 };
+        async function streamToString(stream) {
+          const chunks = [];
+          for await (const chunk of stream) {
+            chunks.push(chunk);
+          }
+          return Buffer.concat(chunks).toString("utf8");
+        }
+        const body = await streamToString(req.body);
+        const payload = JSON.parse(body);
+        const newItem = {
+          ...JSON.parse(body),
+          id: data.length + 1,
+          projectId: payload?.projectId
+            ? parseInt(payload?.projectId)
+            : undefined,
+        };
         data.push(newItem);
         fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
         return new NextResponse(JSON.stringify(newItem), {
@@ -73,7 +106,10 @@ const mockAPIHandler = async (req) => {
 
           console.log({ body });
           if (itemIndex !== -1) {
-            const updatedItem = { ...JSON.parse(body), id: parseInt(id) };
+            const updatedItem = {
+              ...JSON.parse(body),
+              id: parseInt(id),
+            };
             data[itemIndex] = updatedItem;
             fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
             return new NextResponse(JSON.stringify(updatedItem), {

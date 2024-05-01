@@ -4,6 +4,7 @@ import { deleteProject, updateProject } from "@/app/api/fetchAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Card, Form, Input, Modal, Space, Typography } from "antd";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const { Title, Text } = Typography;
 
@@ -12,6 +13,7 @@ const ProjectList = ({ projects }) => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { mutate: updateProjectMutation } = useMutation({
     mutationFn: updateProject,
@@ -29,8 +31,7 @@ const ProjectList = ({ projects }) => {
   });
 
   const handleViewProject = (project) => {
-    // Handle view project logic here
-    console.log("View project:", project);
+    router.push(`/projects/${project.id}`);
   };
 
   const handleEditProject = (project) => {
