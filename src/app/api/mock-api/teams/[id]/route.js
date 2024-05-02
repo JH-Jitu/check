@@ -1,4 +1,4 @@
-import mockAPIHandler from "../../mock-api";
+import mockAPIHandler from "../../api";
 
 export async function GET(req, res) {
   return mockAPIHandler(req, res);
