@@ -3,24 +3,28 @@
     "id": 1,
     "name": "Project A",
     "description": "This is Project A",
-    "teamId": 1
+    "teamId": 1,
+    "activity": "Task Updated: Make a new one and update 121"
   },
   {
     "id": 3,
     "name": "Project C",
     "description": "This is Project C",
-    "teamId": 1
+    "teamId": 1,
+    "activity": "Task Updated: Make a new one and update 121"
   },
   {
     "name": "Project D",
     "description": "123",
     "teamId": 2,
-    "id": 4
+    "id": 4,
+    "activity": "Task Updated: Make a new one and update 121"
   },
   {
     "name": "Project E",
     "description": "This wil be one of the biggest project, E",
     "teamId": 2,
-    "id": 5
+    "id": 5,
+    "activity": "Task Updated: Make new changes"
   }
 ]

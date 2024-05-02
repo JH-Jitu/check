@@ -22,6 +22,7 @@ import {
   fetchProjectDetails,
   fetchTasks,
   fetchTeams,
+  updateProject,
   updateTask,
 } from "@/app/api/fetchAPI";
 import {
@@ -136,6 +137,13 @@ const ProjectDetailsPage = ({ params }) => {
     },
   });
 
+  const { mutate: updateProjectMutation } = useMutation({
+    mutationFn: updateProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["projects"]);
+    },
+  });
+
   const handleAddTask = (prevTask) => {
     if (prevTask) {
       setSelectedTask(prevTask);
@@ -153,6 +161,11 @@ const ProjectDetailsPage = ({ params }) => {
 
   const handleSubmitTask = (values) => {
     addTaskMutation({ ...values, status: "todo", projectId: id });
+    updateProjectMutation({
+      ...project,
+      activity: `Task Added: ${values?.name}`,
+      id: project.id,
+    });
     openNotification();
   };
 
@@ -170,7 +183,11 @@ const ProjectDetailsPage = ({ params }) => {
   const handleUpdateTask = (values) => {
     const updated = { ...selectedTask, ...values };
     updateTaskMutation({ ...updated, id: updated?.id });
-
+    updateProjectMutation({
+      ...project,
+      activity: `Task Updated: ${values?.name}`,
+      id: project.id,
+    });
     setSelectedTask(null);
     openNotification();
     handleDrawerClose();
@@ -194,8 +211,8 @@ const ProjectDetailsPage = ({ params }) => {
 
   const openNotification = () => {
     api.open({
-      message: "Notification Title",
-      description: "description.",
+      message: "Success",
+      description: "Your request has been successfully done!",
     });
   };
 
@@ -225,7 +242,7 @@ const ProjectDetailsPage = ({ params }) => {
           <div className="flex justify-between">
             <div>
               {" "}
-              <h3>{project.name}</h3>
+              <h3>{project?.name}</h3>
             </div>
             <a href="/projects">Go back to Previous Page</a>
           </div>
@@ -235,7 +252,15 @@ const ProjectDetailsPage = ({ params }) => {
       >
         <div bordered className="rounded-lg">
           <div span={3} className="text-gray-700">
-            <b>Description:</b> {project.description}
+            <b>Description:</b> {project?.description} <br />
+          </div>
+          <div span={3} className="text-gray-700">
+            <b>Recent Activity:</b> {project?.activity && project?.activity}{" "}
+            <br />
+            <span className="text-[#67C6E3]">
+              Please Click Details of each task to see team members and more
+              details
+            </span>
           </div>
 
           {/* New */}
