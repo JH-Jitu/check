@@ -1,3 +1,3 @@
-import mockAPIHandler from "@/mock-api/mock-api";
+import mockAPIHandler from "@/api/mock-api";
 
 export default mockAPIHandler;
