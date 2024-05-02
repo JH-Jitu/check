@@ -25,10 +25,10 @@
   },
   {
     "id": 3,
-    "name": "Task 3",
+    "name": "Task 3 updated",
     "description": "This is Task 3",
     "status": "done",
-    "dueDate": "2023-05-20",
+    "dueDate": "2024-05-09",
     "projectId": 3,
     "assignedTo": [
       2,
@@ -135,7 +135,7 @@
       3
     ],
     "dueDate": "2024-05-10",
-    "status": "in-progress",
+    "status": "done",
     "projectId": 3,
     "id": 11
   },
@@ -162,5 +162,16 @@
     "status": "in-progress",
     "projectId": 5,
     "id": 13
+  },
+  {
+    "name": "New Task",
+    "description": "updated",
+    "assignedTo": [
+      2
+    ],
+    "dueDate": "2024-05-15",
+    "status": "todo",
+    "projectId": 3,
+    "id": 14
   }
 ]
