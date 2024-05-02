@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import TrashIcon from "./icons/TrashIcon";
 import { Button, Descriptions, Modal } from "antd";
 import { fetchTeams } from "@/app/api/fetchAPI";
@@ -16,21 +15,15 @@ function TaskCard({
   const [editMode, setEditMode] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: task.id,
-    data: {
-      type: "Task",
-      task,
-    },
-    disabled: editMode,
-  });
+  const { setNodeRef, attributes, listeners, transition, isDragging } =
+    useSortable({
+      id: task.id,
+      data: {
+        type: "Task",
+        task,
+      },
+      disabled: editMode,
+    });
 
   const style = {
     transition,

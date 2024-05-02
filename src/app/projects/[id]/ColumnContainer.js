@@ -1,7 +1,5 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { useMemo, useState } from "react";
-import TrashIcon from "./icons/TrashIcon";
-import PlusIcon from "./icons/PlusIcon";
 import TaskCard from "./TaskCard";
 
 function ColumnContainer({
