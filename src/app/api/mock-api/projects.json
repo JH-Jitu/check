@@ -6,12 +6,6 @@
     "teamId": 1
   },
   {
-    "name": "Project B",
-    "description": "This is Project B",
-    "teamId": 2,
-    "id": 2
-  },
-  {
     "id": 3,
     "name": "Project C",
     "description": "This is Project C",
@@ -22,5 +16,11 @@
     "description": "123",
     "teamId": 2,
     "id": 4
+  },
+  {
+    "name": "Project E",
+    "description": "This wil be one of the biggest project, E",
+    "teamId": 2,
+    "id": 5
   }
 ]

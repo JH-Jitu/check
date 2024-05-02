@@ -2,9 +2,21 @@
 
 import { deleteProject, updateProject } from "@/app/api/fetchAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Card, Form, Input, Modal, Space, Typography } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Card,
+  Descriptions,
+  Form,
+  Input,
+  Modal,
+  Space,
+  Tooltip,
+  Typography,
+} from "antd";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import confirm from "antd/es/modal/confirm";
 
 const { Title, Text } = Typography;
 
@@ -57,8 +69,8 @@ const ProjectList = ({ projects }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Space size={20} direction="vertical" className="w-full">
+    <div className="">
+      <div className="space-y-4 w-full">
         {projects.map((project) => (
           <Card
             key={project.id}
@@ -72,41 +84,65 @@ const ProjectList = ({ projects }) => {
               </Title>
             }
             extra={
-              <>
+              <div className="py-2">
                 <Text type="secondary" className="mr-5">
                   Team ID: {project.teamId}
                 </Text>
-                <Space size="middle" direction="horizontal" className="text-sm">
-                  <Button
-                    type="primary"
-                    onClick={() => handleViewProject(project)}
-                  >
-                    View
-                  </Button>
-                  <Button
-                    type="default"
-                    onClick={() => handleEditProject(project)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    type="default"
-                    onClick={() => handleDeleteProject(project.id)}
-                    danger
-                  >
-                    Delete
-                  </Button>
-                </Space>
-              </>
+                <div className="text-sm space-x-2 sm:space-x-4">
+                  <Tooltip title="Click to show Project details page">
+                    <Button
+                      type="primary"
+                      onClick={() => handleViewProject(project)}
+                      styles={{ button: "#153448" }}
+                    >
+                      View
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip title="Click to Edit Project">
+                    <Button
+                      type="default"
+                      onClick={() => handleEditProject(project)}
+                    >
+                      Edit
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip title="Click to Delete Project">
+                    <Button
+                      type="default"
+                      onClick={() => {
+                        confirm({
+                          icon: <ExclamationCircleOutlined />,
+                          content: (
+                            <Descriptions.Item>
+                              Are you sure you want to delete?
+                            </Descriptions.Item>
+                          ),
+                          onOk() {
+                            handleDeleteProject(project.id);
+                          },
+                          onCancel() {
+                            console.log("Cancel");
+                          },
+                        });
+                      }}
+                      danger
+                    >
+                      Delete
+                    </Button>
+                  </Tooltip>
+                </div>
+              </div>
             }
             className="w-full shadow-md rounded-lg"
           >
-            <div className="grid grid-cols-2 gap-4 p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
               <Text>{project.description}</Text>
             </div>
           </Card>
         ))}
-      </Space>
+      </div>
 
       <Modal
         title={selectedProject ? `Edit Project: ${selectedProject.name}` : ""}

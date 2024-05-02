@@ -1,12 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, Space, Spin, Drawer, Form, Input, Select, Alert } from "antd";
+import {
+  Button,
+  Space,
+  Spin,
+  Drawer,
+  Form,
+  Input,
+  Select,
+  Alert,
+  Avatar,
+} from "antd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useProjectStore from "@/store/projectStore/projectStore";
 import useAuthStore from "@/store/authStore/authStore";
 import ProjectList from "@/components/ProjectList/ProjectList";
 import { addProject, fetchProjects, fetchTeams } from "../api/fetchAPI";
-
+import PlusIcon from "./[id]/icons/PlusIcon";
+import { UserOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const ProjectsOverviewPage = () => {
@@ -62,14 +73,22 @@ const ProjectsOverviewPage = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <Space>
-          <Button type="primary" onClick={handleAddProject}>
-            Add Project
-          </Button>
+    <div className="p-4 mx-auto container">
+      <div className="mb-4 flex justify-between">
+        <div className="space-x-4 flex items-center">
+          <button
+            className="rounded-md shadow-sm flex justify-center items-center border border-2 border-gray-50 py-1 px-4 "
+            type="primary"
+            onClick={handleAddProject}
+          >
+            <PlusIcon /> Add Project
+          </button>
           <Button onClick={refetch}>Refresh</Button>
-        </Space>
+        </div>
+        <div>
+          <span className="mr-2">{user?.name}</span>
+          <Avatar size={36} icon={<UserOutlined />} />
+        </div>
       </div>
       {isLoading ? (
         <div className="flex justify-center">

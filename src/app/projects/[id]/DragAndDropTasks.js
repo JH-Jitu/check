@@ -82,41 +82,29 @@ function DragAndDropTask(props) {
   );
 
   return (
-    <div
-      className="
-        m-auto
-        flex
-        w-full
-        items-center
-        overflow-x-auto
-        overflow-y-hidden
-        px-[40px]
-    "
-    >
+    <div className="flex min-h-screen w-full flex-col items-center px-4 md:px-10 overflow-x-auto overflow-y-hidden">
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
       >
-        <div className="m-auto flex gap-4">
-          <div className="flex gap-4">
-            <SortableContext items={columnsId}>
-              {columns?.map((col) => (
-                <ColumnContainer
-                  key={col.id}
-                  column={col}
-                  createTask={createTask}
-                  deleteTask={deleteTask}
-                  updateTask={updateTask}
-                  tasks={tasks.filter((task) => task.status === col.id)}
-                  handleAddTask={handleAddTask}
-                />
-              ))}
-            </SortableContext>
-          </div>
+        <div className="flex gap-4 flex-wrap xl:flex-nowrap w-full justify-center">
+          <SortableContext items={columnsId}>
+            {columns?.map((col) => (
+              <ColumnContainer
+                key={col.id}
+                column={col}
+                createTask={createTask}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
+                tasks={tasks.filter((task) => task.status === col.id)}
+                handleAddTask={handleAddTask}
+                className="mb-4 md:mb-0"
+              />
+            ))}
+          </SortableContext>
         </div>
-
         {createPortal(
           <DragOverlay>
             {activeColumn && (

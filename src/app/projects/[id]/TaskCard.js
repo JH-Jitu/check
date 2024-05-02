@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "./icons/TrashIcon";
-import { Button, Descriptions, Modal } from "antd";
+import { Button, Card, Descriptions, Modal } from "antd";
 import { fetchTeams } from "@/app/api/fetchAPI";
 import { useQuery } from "@tanstack/react-query";
 
 function TaskCard({
   task,
-  deleteTask,
+  // deleteTask,
   // updateTask,
   handleAddTask,
 }) {
-  const [mouseIsOver, setMouseIsOver] = useState(false);
+  // const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editMode, setEditMode] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,7 +37,7 @@ function TaskCard({
 
   const toggleEditMode = () => {
     setEditMode((prev) => !prev);
-    setMouseIsOver(false);
+    // setMouseIsOver(false);
   };
 
   const handleModalOk = () => {
@@ -82,19 +82,19 @@ function TaskCard({
       {...attributes}
       {...listeners}
       onClick={toggleEditMode}
-      className="bg-indigo-200 p-4 rounded-lg hover:shadow-lg cursor-grab relative task"
+      className="bg-[#DFF5FF] p-4 rounded-lg hover:shadow-lg cursor-grab relative task"
       onMouseEnter={() => {
         toggleEditMode();
-        setMouseIsOver(true);
+        // setMouseIsOver(true);
       }}
-      onMouseLeave={() => {
-        setMouseIsOver(false);
-      }}
+      // onMouseLeave={() => {
+      //   setMouseIsOver(false);
+      // }}
     >
       <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-gray-800">
         {task.name}
       </p>
-      {mouseIsOver && (
+      {/* {mouseIsOver && (
         <button
           onClick={() => {
             deleteTask(task.id);
@@ -103,7 +103,7 @@ function TaskCard({
         >
           <TrashIcon />
         </button>
-      )}
+      )} */}
       <div className="flex justify-end">
         <Button
           type="default"
@@ -121,33 +121,32 @@ function TaskCard({
         </Button>
       </div>
       <Modal
-        title={task ? `${task.name}` : ""}
+        // title={task ? `${task.name}` : ""}
         open={isModalOpen}
         onOk={handleModalOk}
         onCancel={handleModalCancel}
       >
-        <>
-          <Descriptions.Item className="mb-4" label="Team Members" span={3}>
-            <b>Description:</b>
-            <div>{task?.description}</div>
-          </Descriptions.Item>
-          <Descriptions.Item className="mb-4" label="Team Members" span={3}>
-            <b>Due Date</b>
-            <div>
-              {new Date(task?.dueDate).toLocaleDateString("en-US", {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </div>
-          </Descriptions.Item>
-          <Descriptions.Item className="mb-4" label="Team Members" span={3}>
-            <b>Status</b>
-            <div className="capitalize">{task?.status}</div>
-          </Descriptions.Item>
-          <Descriptions.Item className="mb-4" label="Team Members" span={3}>
-            <b>Assigned Team Members</b>
+        <Card title={task ? `${task.name}` : ""} className="mb-5">
+          <Descriptions className="mt-4">
+            <Descriptions.Item label="Description" span={3} className="mb-2">
+              <div>{task?.description}</div>
+            </Descriptions.Item>
+            <Descriptions.Item label="Due Date" span={3} className="mb-2">
+              <div>
+                {new Date(task?.dueDate).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </div>
+            </Descriptions.Item>
+            <Descriptions.Item label="Status" span={3} className="mb-2">
+              <div className="capitalize">{task?.status}</div>
+            </Descriptions.Item>
+          </Descriptions>
+          <div label="Assigned Team Members" span={3} className="mb-2">
+            <span className="text-[#adabab]">Assigned Team Members: </span>
             <div>
               {task?.assignedTo?.length === 0 ? (
                 <p>No team members assigned</p>
@@ -164,8 +163,8 @@ function TaskCard({
                 </ul>
               )}
             </div>
-          </Descriptions.Item>
-        </>
+          </div>
+        </Card>
       </Modal>
     </div>
   );

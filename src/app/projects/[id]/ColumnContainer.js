@@ -45,9 +45,6 @@ function ColumnContainer({
         style={style}
         className="
       bg-columnBackgroundColor
-      opacity-40
-      border-2
-      border-pink-500
       w-[350px]
       h-[500px]
       max-h-[500px]
@@ -64,11 +61,13 @@ function ColumnContainer({
       ref={setNodeRef}
       style={style}
       className="
-  bg-columnBackgroundColor
-  w-[350px]
+  bg-[#67C6E3]
+  min-w-[250px]
+  max-w-[340px]
+  w-full
   h-[500px]
   max-h-[500px]
-  rounded-md
+  rounded-xl
   flex
   flex-col
   "
@@ -89,28 +88,15 @@ function ColumnContainer({
       rounded-b-none
       p-3
       font-bold
-      border-columnBackgroundColor
-      border-4
+      bg-[#5356FF]
+      text-[#DFF5FF]
       flex
       items-center
       justify-between
+      mb-2
       "
       >
         <div className="flex gap-2">
-          <div
-            className="
-        flex
-        justify-center
-        items-center
-        bg-columnBackgroundColor
-        px-2
-        py-1
-        text-sm
-        rounded-full
-        "
-          >
-            0
-          </div>
           {!editMode && column.title}
           {editMode && (
             <input

@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Providers>
-        <body className={inter.className}>
+        <body className={`${inter.className} bg-[#DFF5FF]`}>
           <AntdRegistry>{children}</AntdRegistry>
         </body>
       </Providers>

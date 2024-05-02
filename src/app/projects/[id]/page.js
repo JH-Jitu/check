@@ -15,6 +15,7 @@ import {
   Dropdown,
   Menu,
   Tooltip,
+  notification,
 } from "antd";
 import {
   addTask,
@@ -29,6 +30,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import DragAndDropTasks from "./DragAndDropTasks";
+import PlusIcon from "./icons/PlusIcon";
 
 const { Option } = Select;
 
@@ -57,6 +59,8 @@ const ProjectDetailsPage = ({ params }) => {
   const [assigneeFilter, setAssigneeFilter] = useState(""); // Initialize assigneeFilter state
 
   const [selectedTask, setSelectedTask] = useState("");
+
+  const [api, contextHolder] = notification.useNotification();
 
   const filterTasks = (tasks) => {
     let filteredTasks = tasks;
@@ -149,6 +153,7 @@ const ProjectDetailsPage = ({ params }) => {
 
   const handleSubmitTask = (values) => {
     addTaskMutation({ ...values, status: "todo", projectId: id });
+    openNotification();
   };
 
   const {
@@ -167,6 +172,7 @@ const ProjectDetailsPage = ({ params }) => {
     updateTaskMutation({ ...updated, id: updated?.id });
 
     setSelectedTask(null);
+    openNotification();
     handleDrawerClose();
   };
 
@@ -184,6 +190,13 @@ const ProjectDetailsPage = ({ params }) => {
 
   const handleAssigneeFilterChange = (e) => {
     setAssigneeFilter(e.key);
+  };
+
+  const openNotification = () => {
+    api.open({
+      message: "Notification Title",
+      description: "description.",
+    });
   };
 
   console.log({ status });
@@ -205,27 +218,32 @@ const ProjectDetailsPage = ({ params }) => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-full xl:h-screen">
+      {contextHolder}
       <Card
         title={project.name}
         style={{ width: "100%" }}
-        className="rounded-lg shadow-md bg-white"
+        className="rounded-lg shadow-md bg-white h-[100%]"
       >
-        <Descriptions bordered className="rounded-lg">
-          <Descriptions.Item
-            label="Description"
-            span={3}
-            className="text-gray-700"
-          >
+        <div bordered className="rounded-lg">
+          <div span={3} className="text-gray-700">
             {project.description}
-          </Descriptions.Item>
+          </div>
 
           {/* New */}
-          <Descriptions.Item>
+          <div>
             <div className="mt-4">
-              <div className="flex justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Tasks</h3>
-                <div className="flex items-center">
+              <div className="flex justify-between content-center">
+                <div className="mb-6">
+                  <button
+                    type="primary"
+                    onClick={handleAddTask}
+                    className="mt-4 ml-auto rounded-md shadow-sm flex justify-center items-center border border-1 py-1 px-4"
+                  >
+                    <PlusIcon /> Add Task
+                  </button>
+                </div>
+                <div className="flex items-center flex-wrap md:flex-nowrap">
                   <Input
                     placeholder="Search tasks"
                     prefix={<SearchOutlined />}
@@ -233,6 +251,7 @@ const ProjectDetailsPage = ({ params }) => {
                     onChange={handleSearch}
                     className="mr-4 rounded-md shadow-sm"
                   />
+                  {/* Status Filter */}
                   <Dropdown
                     overlay={
                       <Menu
@@ -263,6 +282,8 @@ const ProjectDetailsPage = ({ params }) => {
                       </Button>
                     </Tooltip>
                   </Dropdown>
+
+                  {/* Date Filter */}
                   <Dropdown
                     overlay={
                       <Menu
@@ -291,6 +312,8 @@ const ProjectDetailsPage = ({ params }) => {
                       </Button>
                     </Tooltip>
                   </Dropdown>
+
+                  {/* Team Filter */}
                   <Dropdown
                     overlay={
                       <Menu
@@ -323,23 +346,18 @@ const ProjectDetailsPage = ({ params }) => {
               {filteredTasks.length === 0 ? (
                 <p className="text-gray-600">No tasks found</p>
               ) : (
-                <DragAndDropTasks
-                  tasks={filteredTasks}
-                  onStatusChange={handleStatusChange}
-                  isPending={isPending}
-                  handleAddTask={handleAddTask}
-                />
+                <div>
+                  <DragAndDropTasks
+                    tasks={filteredTasks}
+                    onStatusChange={handleStatusChange}
+                    isPending={isPending}
+                    handleAddTask={handleAddTask}
+                  />
+                </div>
               )}
-              <Button
-                type="primary"
-                onClick={handleAddTask}
-                className="mt-4 block ml-auto rounded-md shadow-sm"
-              >
-                <PlusOutlined /> Add Task
-              </Button>
             </div>
-          </Descriptions.Item>
-        </Descriptions>
+          </div>
+        </div>
       </Card>
 
       <Drawer

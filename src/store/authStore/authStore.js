@@ -14,7 +14,7 @@ const useAuthStore = create((set) => ({
       credentials.username === "admin" && credentials.password === "password";
     let mockUser;
     if (isAuthenticated) {
-      mockUser = { id: 1, name: "Admin" };
+      mockUser = { id: 1, name: "Md. Jidanul Hakim Jitu" };
     } else {
       return "error";
     }

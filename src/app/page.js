@@ -36,9 +36,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto text-[#5356FF]">
       <div className="flex justify-center items-center h-screen">
-        <div className="w-full max-w-sm md:max-w-md bg-white rounded-lg shadow-md p-6">
+        <div className="w-full max-w-sm md:max-w-md bg-[#DFF5FF] rounded-lg shadow-2xl p-6 shadow-[#5356FF] drop-shadow-lg">
           {error && (
             <Alert
               className="mb-6"
@@ -85,10 +85,11 @@ const LoginPage = () => {
             <Form.Item className="mb-4">
               <Button
                 type="primary"
+                style={{ background: "#5356FF", color: "#DFF5FF" }}
                 htmlType="submit"
                 block
                 loading={loading}
-                className="rounded-md shadow-sm"
+                className="rounded-md shadow-sm bg-[#948979]"
               >
                 Log in
               </Button>
@@ -100,10 +101,12 @@ const LoginPage = () => {
           open={isModalOpen}
           onOk={() => setIsModalOpen((prevState) => !prevState)}
           onCancel={() => setIsModalOpen((prevState) => !prevState)}
-          className="rounded-lg shadow-lg"
+          className="rounded-lg"
         >
-          <p>Username: admin</p>
-          <p>Password: password</p>
+          <div>
+            <p>Username: admin</p>
+            <p>Password: password</p>
+          </div>
         </Modal>
       </div>
     </div>
