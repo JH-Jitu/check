@@ -206,106 +206,114 @@ const ProjectDetailsPage = ({ params }) => {
 
   return (
     <div className="p-4">
-      <Card title={project.name} style={{ width: "100%" }}>
-        <Descriptions bordered>
-          <Descriptions.Item label="Description" span={3}>
+      <Card
+        title={project.name}
+        style={{ width: "100%" }}
+        className="rounded-lg shadow-md bg-white"
+      >
+        <Descriptions bordered className="rounded-lg">
+          <Descriptions.Item
+            label="Description"
+            span={3}
+            className="text-gray-700"
+          >
             {project.description}
-          </Descriptions.Item>
-
-          <Descriptions.Item label="Tasks" span={3}>
-            <div className="mt-4">
-              <h3>Tasks</h3>
-              {tasks?.length === 0 ? (
-                <p>No tasks found</p>
-              ) : (
-                <ul>
-                  {tasks?.map((task, index) => (
-                    <li key={index}>
-                      {task.name}
-                      <Descriptions.Item label="Team Members" span={3}>
-                        <div className="mt-4">
-                          {task?.assignedTo?.length === 0 ? (
-                            <p>No team members assigned</p>
-                          ) : (
-                            <ul>
-                              {getAssignedTeamMembers(task).map(
-                                (member, index) => (
-                                  <li key={index}>{member.name}</li>
-                                )
-                              )}
-                            </ul>
-                          )}
-                        </div>
-                      </Descriptions.Item>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <Button type="primary" onClick={handleAddTask}>
-                <PlusOutlined /> Add Task
-              </Button>
-            </div>
           </Descriptions.Item>
 
           {/* New */}
           <Descriptions.Item>
             <div className="mt-4">
               <div className="flex justify-between mb-4">
-                <h3>Tasks</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Tasks</h3>
                 <div className="flex items-center">
                   <Input
                     placeholder="Search tasks"
                     prefix={<SearchOutlined />}
                     value={searchTerm}
                     onChange={handleSearch}
-                    className="mr-4"
+                    className="mr-4 rounded-md shadow-sm"
                   />
                   <Dropdown
                     overlay={
-                      <Menu onClick={handleStatusFilterChange}>
-                        <Menu.Item key="">All</Menu.Item>
-                        <Menu.Item key={"todo"}>To Do</Menu.Item>
-                        <Menu.Item key="in-progress">In Progress</Menu.Item>
-                        <Menu.Item key="done">Done</Menu.Item>
+                      <Menu
+                        onClick={handleStatusFilterChange}
+                        className="rounded-md shadow-md"
+                      >
+                        <Menu.Item key="" className="hover:bg-gray-100">
+                          All
+                        </Menu.Item>
+                        <Menu.Item key={"todo"} className="hover:bg-gray-100">
+                          To Do
+                        </Menu.Item>
+                        <Menu.Item
+                          key="in-progress"
+                          className="hover:bg-gray-100"
+                        >
+                          In Progress
+                        </Menu.Item>
+                        <Menu.Item key="done" className="hover:bg-gray-100">
+                          Done
+                        </Menu.Item>
                       </Menu>
                     }
                   >
                     <Tooltip title="Filter by status">
-                      <Button>
+                      <Button className="rounded-md shadow-sm">
                         <FilterOutlined /> Status
                       </Button>
                     </Tooltip>
                   </Dropdown>
                   <Dropdown
                     overlay={
-                      <Menu onClick={handleDueFilterChange}>
-                        <Menu.Item key="">All</Menu.Item>
-                        <Menu.Item key="overdue">Overdue</Menu.Item>
-                        <Menu.Item key="today">Today</Menu.Item>
-                        <Menu.Item key="upcoming">Upcoming</Menu.Item>
+                      <Menu
+                        onClick={handleDueFilterChange}
+                        className="rounded-md shadow-md"
+                      >
+                        <Menu.Item key="" className="hover:bg-gray-100">
+                          All
+                        </Menu.Item>
+                        <Menu.Item key="overdue" className="hover:bg-gray-100">
+                          Overdue
+                        </Menu.Item>
+                        <Menu.Item key="today" className="hover:bg-gray-100">
+                          Today
+                        </Menu.Item>
+                        <Menu.Item key="upcoming" className="hover:bg-gray-100">
+                          Upcoming
+                        </Menu.Item>
                       </Menu>
                     }
                     className="ml-2"
                   >
                     <Tooltip title="Filter by due date">
-                      <Button>
+                      <Button className="rounded-md shadow-sm">
                         <FilterOutlined /> Due Date
                       </Button>
                     </Tooltip>
                   </Dropdown>
                   <Dropdown
                     overlay={
-                      <Menu onClick={handleAssigneeFilterChange}>
-                        <Menu.Item key="">All</Menu.Item>
+                      <Menu
+                        onClick={handleAssigneeFilterChange}
+                        className="rounded-md shadow-md"
+                      >
+                        <Menu.Item key="" className="hover:bg-gray-100">
+                          All
+                        </Menu.Item>
                         {teams?.map((team) => (
-                          <Menu.Item key={team.id}>{team.name}</Menu.Item>
+                          <Menu.Item
+                            key={team.id}
+                            className="hover:bg-gray-100"
+                          >
+                            {team.name}
+                          </Menu.Item>
                         ))}
                       </Menu>
                     }
                     className="ml-2"
                   >
                     <Tooltip title="Filter by assignee">
-                      <Button>
+                      <Button className="rounded-md shadow-sm">
                         <FilterOutlined /> Assignee
                       </Button>
                     </Tooltip>
@@ -313,7 +321,7 @@ const ProjectDetailsPage = ({ params }) => {
                 </div>
               </div>
               {filteredTasks.length === 0 ? (
-                <p>No tasks found</p>
+                <p className="text-gray-600">No tasks found</p>
               ) : (
                 <DragAndDropTasks
                   tasks={filteredTasks}
@@ -325,7 +333,7 @@ const ProjectDetailsPage = ({ params }) => {
               <Button
                 type="primary"
                 onClick={handleAddTask}
-                className="mt-4 block ml-auto"
+                className="mt-4 block ml-auto rounded-md shadow-sm"
               >
                 <PlusOutlined /> Add Task
               </Button>
@@ -339,26 +347,30 @@ const ProjectDetailsPage = ({ params }) => {
         width={400}
         open={isDrawerOpen}
         onClose={handleDrawerClose}
+        className="rounded-lg shadow-md"
       >
         <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
           <Form.Item
             name="name"
             label="Task Name"
             rules={[{ required: true, message: "Please enter a task name" }]}
+            className="mb-4"
           >
-            <Input />
+            <Input className="rounded-md shadow-sm" />
           </Form.Item>
           <Form.Item
             name="description"
             label="Description"
             rules={[{ required: true, message: "Please enter a description" }]}
+            className="mb-4"
           >
-            <Input.TextArea />
+            <Input.TextArea className="rounded-md shadow-sm" />
           </Form.Item>
           <Form.Item
             name="assignedTo"
             label="Assigned To"
             rules={[{ required: true, message: "Please select team members" }]}
+            className="mb-4"
           >
             <Select
               mode="multiple"
@@ -368,6 +380,7 @@ const ProjectDetailsPage = ({ params }) => {
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               } // Filter options based on input
+              className="rounded-md shadow-sm"
             >
               {teams?.map((member) => (
                 <Option key={member.id} value={member.id}>
@@ -396,15 +409,25 @@ const ProjectDetailsPage = ({ params }) => {
                 },
               }),
             ]}
+            className="mb-4"
           >
-            <Input type="date" />
+            <Input type="date" className="rounded-md shadow-sm" />
           </Form.Item>
           <Form.Item style={{ marginTop: 24 }}>
             <Space>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="rounded-md shadow-sm"
+              >
                 Submit
               </Button>
-              <Button onClick={handleDrawerClose}>Cancel</Button>
+              <Button
+                onClick={handleDrawerClose}
+                className="rounded-md shadow-sm"
+              >
+                Cancel
+              </Button>
             </Space>
           </Form.Item>
         </Form>

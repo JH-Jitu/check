@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Task 1",
     "description": "This is Task 1",
-    "status": "in-progress",
+    "status": "done",
     "dueDate": "2023-05-20",
     "projectId": 1,
     "assignedTo": [
@@ -81,7 +81,7 @@
       5
     ],
     "dueDate": "2024-05-16",
-    "status": "todo",
+    "status": "done",
     "projectId": 1,
     "id": 7
   },

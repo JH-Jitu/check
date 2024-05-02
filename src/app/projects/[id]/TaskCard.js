@@ -82,7 +82,7 @@ function TaskCard({
       {...attributes}
       {...listeners}
       onClick={toggleEditMode}
-      className="bg-[#adace4] p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative task"
+      className="bg-indigo-200 p-4 rounded-lg hover:shadow-lg cursor-grab relative task"
       onMouseEnter={() => {
         toggleEditMode();
         setMouseIsOver(true);
@@ -91,30 +91,35 @@ function TaskCard({
         setMouseIsOver(false);
       }}
     >
-      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-gray-800">
         {task.name}
       </p>
-
       {mouseIsOver && (
         <button
           onClick={() => {
             deleteTask(task.id);
           }}
-          className="stroke-black absolute right-4 top-1/2 -translate-y-1/2 bg-columnBackgroundColor p-2 rounded opacity-60 hover:opacity-100"
+          className="stroke-black absolute right-4 top-1/2 -translate-y-1/2 bg-gray-200 p-2 rounded-full opacity-60 hover:opacity-100 transition-opacity duration-300"
         >
           <TrashIcon />
         </button>
       )}
-      <Button
-        type="default"
-        onClick={() => setIsModalOpen((prevState) => !prevState)}
-      >
-        Details
-      </Button>
-      <Button type="default" onClick={() => handleAddTask(task)}>
-        Edit
-      </Button>
-
+      <div className="flex justify-end">
+        <Button
+          type="default"
+          onClick={() => setIsModalOpen((prevState) => !prevState)}
+          className="mr-2 rounded-md shadow-sm"
+        >
+          Details
+        </Button>
+        <Button
+          type="default"
+          onClick={() => handleAddTask(task)}
+          className="rounded-md shadow-sm"
+        >
+          Edit
+        </Button>
+      </div>
       <Modal
         title={task ? `${task.name}` : ""}
         open={isModalOpen}

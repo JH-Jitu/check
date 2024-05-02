@@ -86,7 +86,6 @@ function DragAndDropTask(props) {
       className="
         m-auto
         flex
-        min-h-screen
         w-full
         items-center
         overflow-x-auto

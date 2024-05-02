@@ -38,7 +38,7 @@ const LoginPage = () => {
   return (
     <div className="container mx-auto">
       <div className="flex justify-center items-center h-screen">
-        <div className="w-full max-w-sm md:max-w-md">
+        <div className="w-full max-w-sm md:max-w-md bg-white rounded-lg shadow-md p-6">
           {error && (
             <Alert
               className="mb-6"
@@ -54,28 +54,42 @@ const LoginPage = () => {
               rules={[
                 { required: true, message: "Please input your username!" },
               ]}
+              className="mb-4"
             >
-              <Input placeholder="Username" />
+              <Input
+                placeholder="Username"
+                className="ant-input-lg rounded-md shadow-sm"
+              />
             </Form.Item>
-
             <Form.Item
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
               ]}
+              className="mb-4"
             >
-              <Input.Password placeholder="Password" />
+              <Input.Password
+                placeholder="Password"
+                className="ant-input-lg rounded-md shadow-sm"
+              />
             </Form.Item>
-            <Form.Item>
+            <Form.Item className="mb-4">
               <Button
                 type="default"
                 onClick={() => setIsModalOpen((prevState) => !prevState)}
+                className="w-full rounded-md shadow-sm"
               >
                 Show Username and Password
               </Button>
             </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" block loading={loading}>
+            <Form.Item className="mb-4">
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={loading}
+                className="rounded-md shadow-sm"
+              >
                 Log in
               </Button>
             </Form.Item>
@@ -86,6 +100,7 @@ const LoginPage = () => {
           open={isModalOpen}
           onOk={() => setIsModalOpen((prevState) => !prevState)}
           onCancel={() => setIsModalOpen((prevState) => !prevState)}
+          className="rounded-lg shadow-lg"
         >
           <p>Username: admin</p>
           <p>Password: password</p>
