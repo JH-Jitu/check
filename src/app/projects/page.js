@@ -84,6 +84,9 @@ const ProjectsOverviewPage = () => {
             <PlusIcon /> Add Project
           </button>
           <Button onClick={refetch}>Refresh</Button>
+          <a className="text-[#5356FF]" href="/">
+            Home
+          </a>
         </div>
         <div>
           <span className="mr-2">{user?.name}</span>

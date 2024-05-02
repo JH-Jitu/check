@@ -221,13 +221,21 @@ const ProjectDetailsPage = ({ params }) => {
     <div className="p-4 h-full xl:h-screen">
       {contextHolder}
       <Card
-        title={project.name}
+        title={
+          <div className="flex justify-between">
+            <div>
+              {" "}
+              <h3>{project.name}</h3>
+            </div>
+            <a href="/projects">Go back to Previous Page</a>
+          </div>
+        }
         style={{ width: "100%" }}
         className="rounded-lg shadow-md bg-white h-[100%]"
       >
         <div bordered className="rounded-lg">
           <div span={3} className="text-gray-700">
-            {project.description}
+            <b>Description:</b> {project.description}
           </div>
 
           {/* New */}
