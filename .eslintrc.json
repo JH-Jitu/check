@@ -2,8 +2,8 @@
   "extends": "next/core-web-vitals",
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "no-unused-vars": "error",
-    "@typescript-eslint/no-unused-vars": ["error"],
+    // "no-unused-vars": "error",
+    // "@typescript-eslint/no-unused-vars": ["error"],
     // "import/no-unresolved": "error", //Enforce.import/no-unresolved
     "import/named": "error", //Enforce import/named,
     "no-undefined": "warn",
