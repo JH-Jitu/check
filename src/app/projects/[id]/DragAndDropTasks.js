@@ -57,7 +57,7 @@ function DragAndDropTask(props) {
       const isActiveAColumn = active.data.current?.type === "Column";
       if (!isActiveAColumn) return;
 
-      const columns = get().columns;
+      // const columns = get().columns;
       const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
       const overColumnIndex = columns.findIndex((col) => col.id === overId);
 

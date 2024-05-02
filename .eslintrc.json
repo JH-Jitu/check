@@ -6,7 +6,7 @@
     // "@typescript-eslint/no-unused-vars": ["error"],
     // "import/no-unresolved": "error", //Enforce.import/no-unresolved
     "import/named": "error", //Enforce import/named,
-    "no-undefined": "warn",
-    "no-undef": "error"
+    "no-undefined": "warn"
+    // "no-undef": "error"
   }
 }

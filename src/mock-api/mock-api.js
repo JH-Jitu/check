@@ -60,7 +60,7 @@ const mockAPIHandler = async (req) => {
             );
           }
 
-          getData(resource === "tasks" ? projectId : id);
+          // getData(resource === "tasks" ? projectId : id);
         } else {
           return new NextResponse(JSON.stringify(data), {
             headers: { "Content-Type": "application/json" },
