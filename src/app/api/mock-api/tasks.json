@@ -68,7 +68,7 @@
     "dueDate": "2024-05-15",
     "projectId": 3,
     "id": 6,
-    "status": "done"
+    "status": "in-progress"
   },
   {
     "name": "Task 7",
@@ -86,15 +86,29 @@
     "id": 7
   },
   {
-    "name": "Make the Validation",
+    "name": "Make the Validation changed 23",
     "description": "You must have to check the validation",
     "assignedTo": [
       3,
-      4
+      4,
+      2,
+      1,
+      5
     ],
-    "dueDate": "2024-05-16",
-    "status": "in-progress",
+    "dueDate": "2024-05-15",
+    "status": "todo",
     "projectId": 3,
     "id": 8
+  },
+  {
+    "name": "Make a new one and update",
+    "description": "Yes you have to make it",
+    "assignedTo": [
+      3
+    ],
+    "dueDate": "2024-05-16",
+    "status": "done",
+    "projectId": 3,
+    "id": 9
   }
 ]

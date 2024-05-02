@@ -11,6 +11,7 @@ function ColumnContainer({
   tasks,
   deleteTask,
   updateTask,
+  handleAddTask,
 }) {
   const [editMode, setEditMode] = useState(false);
 
@@ -140,6 +141,7 @@ function ColumnContainer({
               task={task}
               deleteTask={deleteTask}
               updateTask={updateTask}
+              handleAddTask={handleAddTask}
             />
           ))}
         </SortableContext>

@@ -56,6 +56,8 @@ const ProjectDetailsPage = ({ params }) => {
   const [dueFilter, setDueFilter] = useState(""); // Initialize dueFilter state
   const [assigneeFilter, setAssigneeFilter] = useState(""); // Initialize assigneeFilter state
 
+  const [selectedTask, setSelectedTask] = useState("");
+
   const filterTasks = (tasks) => {
     let filteredTasks = tasks;
 
@@ -89,8 +91,8 @@ const ProjectDetailsPage = ({ params }) => {
     }
 
     if (assigneeFilter) {
-      filteredTasks = filteredTasks.filter((task) =>
-        task.assignedTo.includes(parseInt(assigneeFilter))
+      filteredTasks = filteredTasks?.filter((task) =>
+        task?.assignedTo?.includes(parseInt(assigneeFilter))
       );
     }
 
@@ -103,18 +105,14 @@ const ProjectDetailsPage = ({ params }) => {
     setSearchTerm(e.target.value); // Update searchTerm state
   };
 
-  const handleStatusFilterChange = (e) => {
-    setStatusFilter(e.key); // Update statusFilter state
-  };
-
   const getAssignedTeamMembers = (task) => {
     const assignedTeamMembers = [];
     console.log({ task });
     if (teams) {
       task &&
         task.assignedTo.forEach((memberId) => {
-          const team = teams.find((t) => t.id === memberId);
-          assignedTeamMembers.push(team);
+          const team = teams?.find((t) => t.id === memberId);
+          assignedTeamMembers?.push(team);
         });
     }
 
@@ -130,7 +128,13 @@ const ProjectDetailsPage = ({ params }) => {
     },
   });
 
-  const handleAddTask = () => {
+  const handleAddTask = (prevTask) => {
+    if (prevTask) {
+      setSelectedTask(prevTask);
+      form.setFieldsValue(prevTask);
+      setIsDrawerOpen(true);
+    }
+
     setIsDrawerOpen(true);
   };
 
@@ -154,20 +158,39 @@ const ProjectDetailsPage = ({ params }) => {
     },
   });
 
-  const handleStatusChange = (updatedTask) => {
-    console.log({ updatedTask });
-    updateTaskMutation({ ...updatedTask, id: updatedTask?.id });
+  const handleUpdateTask = (values) => {
+    const updated = { ...selectedTask, ...values };
+    updateTaskMutation({ ...updated, id: updated?.id });
 
-    // addTaskMutation({ updatedTasks, projectId: id });
-    // const updatedTaskIds = updatedTasks.map((task) => task.id);
-    // queryClient.setQueryData(["tasks", id], updatedTasks);
-    // queryClient.invalidateQueries(["tasks", id]);
-    // console.log({ updatedTaskIds });
-    // Update the task status in the server (if applicable)
-    // You can add an API call here to update the task status on the server-side
+    setSelectedTask(null);
+    handleDrawerClose();
+  };
+
+  const handleStatusChange = (updatedTask) => {
+    updateTaskMutation({ ...updatedTask, id: updatedTask?.id });
+  };
+
+  const handleStatusFilterChange = (e) => {
+    setStatusFilter(e.key);
+  };
+
+  const handleDueFilterChange = (e) => {
+    setDueFilter(e.key);
+  };
+
+  const handleAssigneeFilterChange = (e) => {
+    setAssigneeFilter(e.key);
   };
 
   console.log({ status });
+
+  const handleFormSubmit = (values) => {
+    console.log({ selectedTask });
+    if (!selectedTask?.id) {
+      handleSubmitTask(values);
+    }
+    handleUpdateTask(values);
+  };
 
   if (isProjectLoading || isTasksLoading) {
     return (
@@ -249,7 +272,7 @@ const ProjectDetailsPage = ({ params }) => {
                       </Button>
                     </Tooltip>
                   </Dropdown>
-                  {/* <Dropdown
+                  <Dropdown
                     overlay={
                       <Menu onClick={handleDueFilterChange}>
                         <Menu.Item key="">All</Menu.Item>
@@ -265,16 +288,14 @@ const ProjectDetailsPage = ({ params }) => {
                         <FilterOutlined /> Due Date
                       </Button>
                     </Tooltip>
-                  </Dropdown> */}
-                  {/* <Dropdown
+                  </Dropdown>
+                  <Dropdown
                     overlay={
                       <Menu onClick={handleAssigneeFilterChange}>
                         <Menu.Item key="">All</Menu.Item>
-                        {teams.map((team) =>
-                          team.members.map((member) => (
-                            <Menu.Item key={member.id}>{member.name}</Menu.Item>
-                          ))
-                        )}
+                        {teams?.map((team) => (
+                          <Menu.Item key={team.id}>{team.name}</Menu.Item>
+                        ))}
                       </Menu>
                     }
                     className="ml-2"
@@ -284,7 +305,7 @@ const ProjectDetailsPage = ({ params }) => {
                         <FilterOutlined /> Assignee
                       </Button>
                     </Tooltip>
-                  </Dropdown> */}
+                  </Dropdown>
                 </div>
               </div>
               {filteredTasks.length === 0 ? (
@@ -315,7 +336,7 @@ const ProjectDetailsPage = ({ params }) => {
         open={isDrawerOpen}
         onClose={handleDrawerClose}
       >
-        <Form form={form} layout="vertical" onFinish={handleSubmitTask}>
+        <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
           <Form.Item
             name="name"
             label="Task Name"
@@ -355,7 +376,22 @@ const ProjectDetailsPage = ({ params }) => {
           <Form.Item
             name="dueDate"
             label="Due Date"
-            rules={[{ required: true, message: "Please select a due date" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please select a due date",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || new Date(value) >= new Date()) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Please select at least 1 day after today")
+                  );
+                },
+              }),
+            ]}
           >
             <Input type="date" />
           </Form.Item>
