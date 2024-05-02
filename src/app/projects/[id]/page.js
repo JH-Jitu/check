@@ -62,8 +62,8 @@ const ProjectDetailsPage = ({ params }) => {
     let filteredTasks = tasks;
 
     if (searchTerm) {
-      filteredTasks = filteredTasks.filter((task) =>
-        task.name.toLowerCase().includes(searchTerm.toLowerCase())
+      filteredTasks = filteredTasks?.filter((task) =>
+        task?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
       );
     }
 
