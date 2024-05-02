@@ -74,20 +74,24 @@ const ProjectDetailsPage = ({ params }) => {
     }
 
     if (dueFilter === "overdue") {
-      filteredTasks = filteredTasks.filter((task) => task.dueDate < new Date());
+      filteredTasks = filteredTasks.filter((task) => {
+        const dueDate = new Date(task.dueDate);
+        return dueDate < new Date();
+      });
     } else if (dueFilter === "today") {
-      const today = new Date();
-      filteredTasks = filteredTasks.filter(
-        (task) =>
-          task.dueDate >= today &&
-          task.dueDate < new Date(today.getTime() + 24 * 60 * 60 * 1000)
-      );
+      filteredTasks = filteredTasks.filter((task) => {
+        const dueDate = new Date(task.dueDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set time to 00:00:00
+        const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        return dueDate >= today && dueDate < tomorrow;
+      });
     } else if (dueFilter === "upcoming") {
-      const today = new Date();
-      filteredTasks = filteredTasks.filter(
-        (task) =>
-          task.dueDate >= new Date(today.getTime() + 24 * 60 * 60 * 1000)
-      );
+      filteredTasks = filteredTasks.filter((task) => {
+        const dueDate = new Date(task.dueDate);
+        const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+        return dueDate >= tomorrow;
+      });
     }
 
     if (assigneeFilter) {
